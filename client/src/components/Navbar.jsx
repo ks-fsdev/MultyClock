@@ -6,6 +6,7 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 import { useTimerContext } from "../context/TimerContext";
+import { ClockPlus } from "lucide-react";
 
 const Navbar = () => {
   const { isFormOpen, setIsFormOpen } = useTimerContext();
@@ -15,8 +16,8 @@ const Navbar = () => {
       {/* Left: Brand / Logo */}
       <div className="flex items-center gap-2">
         <div className="h-6 w-6 bg-indigo-500 rounded-full animate-pulse"></div>
-        <span className="text-lg font-bold tracking-tight text-white">
-          Clock<span className="text-indigo-400">App</span>
+        <span className="text-lg font-bold tracking-tight text-white md:inline-block hidden">
+          Multy<span className="text-indigo-400">Clock</span>
         </span>
       </div>
 
@@ -41,8 +42,8 @@ const Navbar = () => {
         <SignedIn>
           <button
             onClick={() => setIsFormOpen(true)}
-            className={`bg-white text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-200 transition-all cursor-pointer  ${isFormOpen ? "opacity-0" : "opacity-100"}`}>
-            Add Timer
+            className={` text-white hover:text-black px-2 py-2 rounded-lg text-sm font-semibold hover:bg-gray-200 transition-all cursor-pointer  ${isFormOpen ? "opacity-0" : "opacity-100"}`}>
+            <ClockPlus />
           </button>
           <UserButton
             appearance={{

@@ -10,6 +10,15 @@ export const TimerProvider = ({ children }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [timers, setTimers] = useState([]); // We'll use this later for the DB
   const [activeTimer, setActiveTimer] = useState(null); // The timer running on the clock
+  const [liveTimers, setLiveTimers] = useState({});
+  const [globalCommand, setGlobalCommand] = useState(null);
+
+  const syncTimer = (id, timeLeft, isRunning) => {
+    setLiveTimers((prev) => ({
+      ...prev,
+      [id]: { timeLeft, isRunning },
+    }));
+  };
 
   return (
     <TimerContext.Provider
@@ -20,6 +29,10 @@ export const TimerProvider = ({ children }) => {
         setTimers,
         activeTimer,
         setActiveTimer,
+        liveTimers,
+        syncTimer,
+        globalCommand,
+        setGlobalCommand,
       }}>
       {children}
     </TimerContext.Provider>

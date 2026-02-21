@@ -1,56 +1,101 @@
-import { SignedIn, SignedOut, useAuth } from "@clerk/clerk-react";
+import {
+  SignedIn,
+  SignedOut,
+  useAuth,
+  SignInButton,
+  SignUpButton,
+} from "@clerk/clerk-react";
 import axios from "axios";
 import Navbar from "./components/Navbar";
 import AddTimerForm from "./components/AddTimerForm";
-import Clock from "./components/Clock"; 
+import Clock from "./components/Clock";
+import Dashboard from "./components/Dashboard";
+import { useTimerContext } from "./context/TimerContext";
 
 function App() {
   const { getToken } = useAuth();
-
-  // The connection test logic
-  const testApi = async () => {
-    try {
-      const token = await getToken();
-
-      // Note: Make sure your backend URL is correct!
-      const response = await axios.post(
-        "http://localhost:5000/api/timers/add",
-        {
-          label: "Frontend Test Timer",
-          duration: 300,
-          color: "#33FF57",
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-
-      alert("✅ Success! Backend Response: " + response.data.message);
-    } catch (error) {
-      console.error(error);
-      alert("❌ Error: " + (error.response?.data?.message || error.message));
-    }
-  };
+  const { isFormOpen, setIsFormOpen, setTimers } = useTimerContext();
 
   return (
-    <div className="min-h-screen pt-24 px-6 flex flex-col items-center">
-      <Navbar />
-      <Clock />
-
+    <div className="h-screen pt-24 px-6 flex flex-col items-center overflow-hidden">
       <SignedOut>
-        <header className="max-w-2xl text-center mt-12 space-y-4">
-          <h1 className="text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
-            Master Your Time.
-          </h1>
-          <p className="text-lg text-gray-400">
-            The only multi-timer app that lets you bifurcate time like a pro.
-          </p>
-        </header>
+        <div className="flex-1 flex flex-col items-center justify-center px-6 relative w-full h-full">
+          {/* Subtle Deep Space Glow behind the text */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] bg-white/5 rounded-full blur-[100px] pointer-events-none" />
+
+          <div className="relative z-10 text-center max-w-3xl flex flex-col items-center">
+            {/* The Main Tagline */}
+            <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-6">
+              Master Your Time.
+            </h1>
+
+            {/* The Sub-Tagline */}
+            <p className="text-base sm:text-xl text-gray-400 font-light tracking-wide mb-12 max-w-xl mx-auto">
+              The only multi-timer app that lets you bifurcate time like a pro.
+            </p>
+
+            {/* The Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full sm:w-auto">
+              {/* Clerk Sign Up Button (Solid & Glowing) */}
+              <SignUpButton mode="modal">
+                <button className="w-full sm:w-auto px-10 py-3.5 rounded-full bg-white text-black font-bold text-sm tracking-wide hover:bg-gray-200 hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] cursor-pointer">
+                  Get Started
+                </button>
+              </SignUpButton>
+
+              {/* Clerk Log In Button (Outlined & Sleek) */}
+              <SignInButton mode="modal">
+                <button className="w-full sm:w-auto px-10 py-3.5 rounded-full border border-white/20 text-white font-medium text-sm tracking-wide hover:bg-white/10 hover:border-white/40 transition-all cursor-pointer">
+                  Log In
+                </button>
+              </SignInButton>
+            </div>
+          </div>
+        </div>
       </SignedOut>
 
       {/* Only show the 'Test Connection' area if the user is actually logged in */}
       <SignedIn>
-        <AddTimerForm />
+        <Navbar />
+        <div className="w-full max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-3 gap-6 flex-1 min-h-0 mt-4">
+          {/* LEFT SIDE: The Clock (Takes up 1 column out of 3) */}
+          <div className="lg:col-span-1 w-full flex justify-center shrink-0 lg:pt-10">
+            <Clock />
+          </div>
+
+          {/* RIGHT SIDE: The Dashboard (Takes up 2 columns out of 3) */}
+          <div className="lg:col-span-2 w-full flex-1 min-h-0 flex flex-col pr-2">
+            {/* 1. The Frozen Heading */}
+            {/* shrink-0 ensures this heading never gets squished */}
+            <h3 className="text-2xl font-bold mb-6 text-white border-b border-white/10 pb-3 shrink-0 mt-4 lg:mt-0">
+              Active Dashboard
+            </h3>
+
+            {/* 2. The Scrolling List */}
+            {/* flex-1 tells this div to take up the REST of the space, and overflow-y-auto makes it scroll! */}
+            <div className="flex-1 overflow-y-auto touch-no-scrollbar pb-20">
+              <Dashboard />
+            </div>
+          </div>
+        </div>
+        {isFormOpen && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="relative w-full max-w-md">
+              <button
+                onClick={() => setIsFormOpen(false)}
+                className="absolute -top-12 right-0 text-white/50 hover:text-white text-xl p-2 cursor-pointer transition-colors">
+                ✕ Close
+              </button>
+
+              {/* 2. We RENDER the component here when the modal is open */}
+              <AddTimerForm
+                onTimerAdded={() => {
+                  setIsFormOpen(false); // Close the form modal when done
+                }}
+              />
+            </div>
+          </div>
+        )}
       </SignedIn>
     </div>
   );

@@ -35,7 +35,7 @@ const AddTimerForm = ({ onTimerAdded }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
 
     if (intervals.length === 0) {
       alert("You need to add at least one time block!");
@@ -73,10 +73,14 @@ const AddTimerForm = ({ onTimerAdded }) => {
 
   return (
     <div
-      className={`bg-[#181818] border border-white/10 rounded-2xl p-6 w-full max-w-md mx-auto shadow-2xl mt-8 ${isFormOpen ? "block" : "hidden"}`}>
-      <h2 className="text-2xl font-bold mb-6 tracking-tight">New Timer</h2>
+      className={`bg-[#181818] border border-white/10 rounded-2xl p-5 sm:p-6 w-full max-w-md mx-auto shadow-2xl mt-8 ${
+        isFormOpen ? "block" : "hidden"
+      } max-h-[85vh] overflow-y-auto touch-no-scrollbar`}>
+      <h2 className="text-xl sm:text-2xl font-bold mb-5 sm:mb-6 tracking-tight">
+        New Timer
+      </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="space-y-5">
         {/* Label Input */}
         <div>
           <label className="block text-sm font-medium text-gray-400 mb-1">
@@ -88,7 +92,7 @@ const AddTimerForm = ({ onTimerAdded }) => {
             placeholder="e.g., Deep Work, Read..."
             value={label}
             onChange={(e) => setLabel(e.target.value)}
-            className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+            className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 sm:py-2 text-base sm:text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
           />
         </div>
 
@@ -97,14 +101,14 @@ const AddTimerForm = ({ onTimerAdded }) => {
           <label className="block text-sm font-medium text-gray-400 mb-2">
             Timer Ring Color
           </label>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             {ALLOWED_COLORS.map((color) => (
               <button
                 key={color}
                 type="button"
                 onClick={() => setSelectedColor(color)}
                 style={{ backgroundColor: color }}
-                className={`w-8 h-8 rounded-full cursor-pointer transition-transform ${
+                className={`w-8 h-8 sm:w-8 sm:h-8 rounded-full cursor-pointer transition-transform ${
                   selectedColor === color
                     ? "scale-125 ring-2 ring-white ring-offset-2 ring-offset-[#181818]"
                     : "hover:scale-110"
@@ -121,7 +125,7 @@ const AddTimerForm = ({ onTimerAdded }) => {
             Divide your time (Sub-timers)
           </label>
 
-          <div className="flex gap-2 mb-3">
+          <div className="flex flex-col sm:flex-row gap-2 mb-3">
             <input
               type="number"
               placeholder="Minutes (e.g., 5)"
@@ -130,7 +134,7 @@ const AddTimerForm = ({ onTimerAdded }) => {
               onKeyDown={(e) =>
                 e.key === "Enter" && (e.preventDefault(), handleAddInterval())
               }
-              className="w-full bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="flex-1 w-full bg-black/50 border border-white/10 rounded-lg px-3 py-3 sm:py-2 text-base sm:text-sm text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
             />
             <button
               type="button"
@@ -142,12 +146,13 @@ const AddTimerForm = ({ onTimerAdded }) => {
 
           {/* Render the chunks visually */}
           {intervals.length > 0 ? (
-            <div className="flex gap-2 mb-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-white/20">
+            <div className="flex gap-2 mb-4 overflow-x-auto pb-2 touch-no-scrollbar">
               {intervals.map((time, idx) => (
                 <div
                   key={idx}
                   onClick={() => handleRemoveInterval(idx)}
-                  className="bg-white/10 hover:bg-red-500/80 px-3 py-1.5 rounded-md text-sm text-gray-200 whitespace-nowrap cursor-pointer transition-colors flex items-center gap-1 group title='Click to remove'">
+                  className="bg-white/10 hover:bg-red-500/80 px-3 py-2 sm:py-1.5 rounded-md text-sm text-gray-200 whitespace-nowrap cursor-pointer transition-colors flex items-center gap-1 group "
+                  title="Click to remove">
                   {time}m
                   <span className="text-xs opacity-0 group-hover:opacity-100 transition-opacity">
                     ×
@@ -168,12 +173,12 @@ const AddTimerForm = ({ onTimerAdded }) => {
 
         {/* Submit Button */}
         <button
-          type="submit"
-          onClick={() => setIsFormOpen(false)}
+          type="button"
+          onClick={handleSubmit}
           className="w-full mt-6 bg-white text-black font-bold py-3 px-4 rounded-xl hover:bg-gray-200 transition-colors shadow-lg cursor-pointer">
           Save & Launch Timer
         </button>
-      </form>
+      </div>
     </div>
   );
 };
