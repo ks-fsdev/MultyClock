@@ -1,33 +1,47 @@
-// controllers/timerController.js
 import { db } from "../config/firebase.js";
 
-// 🎨 THE AESTHETIC MENU (Our Allowed Colors)
 const ALLOWED_COLORS = [
-  "#FF5733", // Vibrant Orange
-  "#33FF57", // Slime Green
-  "#3357FF", // Electric Blue
-  "#F0F0F0", // Minimalist White
-  "#121212", // Deep Black
+  "#FF5733",
+  "#F0F0F0",
+  "#FF2A6D",
+  "#39FF14",
+  "#FAEA48",
+  "#9D4EDD",
 ];
 
 // --- CREATE TIMER (POST) ---
 export const createTimer = async (req, res) => {
   try {
     const { userId } = req.auth;
-    // We added 'intervals' here to grab it from the frontend
     let { label, duration, color, intervals } = req.body;
 
-    // 🛡️ AESTHETIC GUARD: Check if the color is allowed
-    if (!ALLOWED_COLORS.includes(color)) {
-      color = ALLOWED_COLORS[0];
-    }
+    // Fetch colors currently used by this user
+    const userTimersSnapshot = await db
+      .collection("timers")
+      .where("userId", "==", userId)
+      .select("color")
+      .get();
 
-    // In Firestore, we 'add' to a collection.
+    const usedColors = userTimersSnapshot.docs.map((doc) => doc.data().color);
+
+    // Logic to determine the final color
+    if (
+      !color ||
+      usedColors.includes(color) ||
+      !ALLOWED_COLORS.includes(color)
+    ) {
+      const availableColor = ALLOWED_COLORS.find(
+        (c) => !usedColors.includes(c),
+      );
+
+      color = availableColor || ALLOWED_COLORS[0];
+    }
+    // Adding to a firebase collection.
     const docRef = await db.collection("timers").add({
       label,
       duration,
       color,
-      intervals: intervals || [], // Added this so it actually saves to the DB
+      intervals: intervals || [],
       userId,
       createdAt: new Date().toISOString(),
     });
@@ -46,16 +60,15 @@ export const createTimer = async (req, res) => {
 // --- GET TIMERS (GET) ---
 export const getTimers = async (req, res) => {
   try {
-    const { userId } = req.auth; // We'll filter by user
+    const { userId } = req.auth;
 
-    // Logic: Go to 'timers' collection -> find matches -> get them
     const snapshot = await db
       .collection("timers")
       .where("userId", "==", userId)
-      .orderBy("createdAt", "desc") // Newest timers first
+      .orderBy("createdAt", "desc")
       .get();
 
-    // Firestore returns a 'snapshot'. we need to loop to get the actual data.
+    // convering shapshot to data.
     const timers = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -70,18 +83,16 @@ export const getTimers = async (req, res) => {
 // DELETE TIMER
 export const deleteTimer = async (req, res) => {
   try {
-    const { id } = req.params; // Get the timer ID from the URL
-    const { userId } = req.auth; // Get the user ID from Clerk
+    const { id } = req.params; 
+    const { userId } = req.auth;
 
     const timerRef = db.collection("timers").doc(id);
     const doc = await timerRef.get();
 
-    // 1. Does this timer even exist?
     if (!doc.exists) {
       return res.status(404).json({ success: false, error: "Timer not found" });
     }
 
-    // 2. 🛡️ SECURITY CHECK: Is this YOUR timer?
     if (doc.data().userId !== userId) {
       return res.status(403).json({
         success: false,
@@ -89,7 +100,7 @@ export const deleteTimer = async (req, res) => {
       });
     }
 
-    // 3. Delete it
+    // Delete it
     await timerRef.delete();
 
     res

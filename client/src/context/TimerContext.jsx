@@ -10,6 +10,7 @@ export const TimerProvider = ({ children }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [timers, setTimers] = useState([]); // We'll use this later for the DB
   const [activeTimer, setActiveTimer] = useState(null); // The timer running on the clock
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [liveTimers, setLiveTimers] = useState({});
   const [globalCommand, setGlobalCommand] = useState(null);
 
@@ -33,6 +34,7 @@ export const TimerProvider = ({ children }) => {
         syncTimer,
         globalCommand,
         setGlobalCommand,
+        backendUrl,
       }}>
       {children}
     </TimerContext.Provider>

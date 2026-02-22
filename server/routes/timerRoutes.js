@@ -1,4 +1,3 @@
-// routes/timerRoutes.js
 import express from "express";
 import {
   createTimer,
@@ -9,9 +8,8 @@ import { requireAuth } from "@clerk/express";
 
 const router = express.Router();
 
-// This will be accessible at /api/timers/add
 router.post("/add", requireAuth(), createTimer);
-router.get("/all", requireAuth(), getTimers); // GET: /api/timers/all?userId=123
+router.get("/all", requireAuth(), getTimers);
 router.delete("/delete/:id", requireAuth(), deleteTimer);
 
 export default router;

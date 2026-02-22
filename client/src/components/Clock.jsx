@@ -4,13 +4,12 @@ import { useTimerContext } from "../context/TimerContext";
 const Clock = () => {
   const { timers, liveTimers, setGlobalCommand } = useTimerContext();
 
-  // 1. Sort timers by total duration (longest first)
+  // Sort timers by total duration (longest first)
   const sortedTimers = [...timers].sort((a, b) => b.duration - a.duration);
 
-  // SVG Base Configuration
   const center = 200; // Center point of the SVG
   const stroke = 3; // Thickness of the rings
-  const gap = 9; // Space between rings
+  const gap = 11; // Space between rings
   const maxRadius = 180; // The outermost ring size
 
   return (
@@ -20,11 +19,10 @@ const Clock = () => {
         <svg
           viewBox={`0 0 ${center * 2} ${center * 2}`}
           className="-rotate-90 w-full max-w-[400px] h-auto aspect-square">
-          {/* If no timers exist, show a single resting gray ring with exact stroke thickness */}
           {sortedTimers.length === 0 && (
             <circle
-              stroke="rgba(255, 255, 255, 0.2)" // Gray border
-              strokeWidth={stroke} // Matches your exact stroke thickness
+              stroke="rgba(255, 255, 255, 0.2)"
+              strokeWidth={stroke}
               fill="transparent"
               r={maxRadius}
               cx={center}
@@ -86,7 +84,7 @@ const Clock = () => {
           })}
         </svg>
 
-        {/* Center Display: The Black Hole Void (ALWAYS renders now) */}
+        {/* Center Display */}
         {(() => {
           const isAnythingRunning = Object.values(liveTimers).some(
             (t) => t.isRunning,
@@ -140,7 +138,7 @@ const Clock = () => {
           return (
             <button
               onClick={handleGlobalToggle}
-              // Disabled clicking if there are no timers so it acts like a static UI element
+              // Disabled clicking if there are no timers
               disabled={timers.length === 0}
               className={`absolute flex items-center justify-center w-40 h-40 rounded-full group outline-none transition-transform ${
                 timers.length > 0
@@ -148,7 +146,7 @@ const Clock = () => {
                   : "cursor-default"
               }`}
               title={isAnythingRunning ? "Pause All" : "Play All"}>
-              {/* The Deep Void Background */}
+              {/* Background */}
               <div
                 className="absolute inset-0 rounded-full bg-black border border-white/5 transition-all duration-700"
                 style={{
@@ -170,7 +168,6 @@ const Clock = () => {
                 className={`relative z-10 font-mono text-5xl font-light tracking-widest tabular-nums transition-all duration-500 doto-font ${
                   isAnythingRunning ? "text-white" : "text-white/20"
                 }`}>
-                {/* The replace(":", " ") ensures it shows as "00 00" instead of "00:00" */}
                 {formatCenterTime(nextUpTimer.timeLeft).replace(":", " ")}
               </div>
             </button>
