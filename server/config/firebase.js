@@ -17,9 +17,16 @@ const firebaseConfig = {
   universe_domain: process.env.FIREBASE_UNIVERSAL_DOMAIN,
 };
 
-admin.initializeApp({
-  credential: admin.credential.cert(firebaseConfig),
-});
+if (!admin.apps.length) {
+  try {
+    admin.initializeApp({
+      credential: admin.credential.cert(firebaseConfig),
+    });
+    console.log("🔥 Firebase Admin initialized");
+  } catch (error) {
+    console.error("Firebase admin initialization error", error.stack);
+  }
+}
 
 export const db = admin.firestore();
 console.log("🔥 Firebase Admin initialized (ES Modules)");
