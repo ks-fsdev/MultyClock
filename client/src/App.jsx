@@ -21,25 +21,16 @@ function App() {
         position="top-30"
         toastOptions={{
           // Default styling for all toasts
-          style: {
-            background: "#181818",
-            color: "#fff",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
-            borderRadius: "1rem",
-            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
-            margin: "50px 20px",
-          },
-          // Customizing the success checkmark
+          className: "toast-detault",
           success: {
             iconTheme: {
-              primary: "#A0E8AF", // Mint Glow
+              primary: "#A0E8AF",
               secondary: "#181818",
             },
           },
-          // Customizing the error X
           error: {
             iconTheme: {
-              primary: "#FF003C", // Crimson Red
+              primary: "#FF003C",
               secondary: "#181818",
             },
           },
@@ -47,11 +38,11 @@ function App() {
       />
 
       <SignedOut>
-        <div className="flex-1 flex flex-col items-center justify-center px-6 relative w-full h-full">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] bg-white/5 rounded-full blur-[100px] pointer-events-none" />
+        <div className="flex-1 flexbox flex-col px-6 relative w-full h-full">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-75 h-75 sm:w-150 sm:h-150 bg-white/5 rounded-full blur-[100px] pointer-events-none" />
 
           <div className="relative z-10 text-center max-w-3xl flex flex-col items-center">
-            <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-6">
+            <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-linear-to-b from-white to-gray-500 mb-6">
               Master Your Time.
             </h1>
 
@@ -61,13 +52,13 @@ function App() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full sm:w-auto">
               <SignUpButton mode="modal">
-                <button className="w-full sm:w-auto px-10 py-3.5 rounded-full bg-white text-black font-bold text-sm tracking-wide hover:bg-gray-200 hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] cursor-pointer">
+                <button className="intro-button bg-white text-black font-bold text-sm  hover:bg-gray-200 hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]">
                   Get Started
                 </button>
               </SignUpButton>
 
               <SignInButton mode="modal">
-                <button className="w-full sm:w-auto px-10 py-3.5 rounded-full border border-white/20 text-white font-medium text-sm tracking-wide hover:bg-white/10 hover:border-white/40 transition-all cursor-pointer">
+                <button className="intro-button border border-white/20 text-white font-medium text-sm tracking-wide hover:bg-white/10 hover:border-white/40 transition-all">
                   Log In
                 </button>
               </SignInButton>
@@ -98,7 +89,7 @@ function App() {
           </div>
         </div>
         {isFormOpen && (
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flexbox p-4">
             <div className="relative w-full max-w-md">
               <button
                 onClick={() => setIsFormOpen(false)}

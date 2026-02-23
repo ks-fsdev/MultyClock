@@ -199,7 +199,7 @@ const AddTimerForm = ({ onTimerAdded }) => {
           </div>
 
           {/* Visual Intervals */}
-          <div className="flex flex-wrap gap-2 min-h-[40px]">
+          <div className="flex flex-wrap gap-2 min-h-10">
             {intervals.map((time, idx) => (
               <button
                 key={idx}

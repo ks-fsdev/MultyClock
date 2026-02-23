@@ -18,7 +18,7 @@ const Clock = () => {
         {/* The SVG Clock Rings */}
         <svg
           viewBox={`0 0 ${center * 2} ${center * 2}`}
-          className="-rotate-90 w-full max-w-[400px] h-auto aspect-square">
+          className="-rotate-90 w-full max-w-100 h-auto aspect-square">
           {sortedTimers.length === 0 && (
             <circle
               stroke="rgba(255, 255, 255, 0.2)"
@@ -140,7 +140,7 @@ const Clock = () => {
               onClick={handleGlobalToggle}
               // Disabled clicking if there are no timers
               disabled={timers.length === 0}
-              className={`absolute flex items-center justify-center w-40 h-40 rounded-full group outline-none transition-transform ${
+              className={`absolute flexbox w-40 h-40 rounded-full group outline-none transition-transform ${
                 timers.length > 0
                   ? "cursor-pointer active:scale-95"
                   : "cursor-default"

@@ -31,7 +31,7 @@ const TimerCard = ({ timer }) => {
 
     const toastId = toast(
       (t) => (
-        <div className="flex flex-col gap-3 min-w-[200px]">
+        <div className="flex flex-col gap-3 min-w-50">
           <div className="flex items-center gap-2">
             <span className="font-bold text-white">
               {isFinal ? "Timer Complete!" : "Checkpoint Reached!"}
@@ -104,8 +104,8 @@ const TimerCard = ({ timer }) => {
           <div className="flex gap-4">
             <button
               onClick={async () => {
-                toast.dismiss(t.id); // Dismiss prompt first
-                await confirmDelete(); // Then wait for the delete to finish
+                toast.dismiss(t.id); 
+                await confirmDelete(); 
               }}
               className="bg-[#ff4b4b] text-white border-0 px-3 py-1 rounded cursor-pointer w-full font-bold">
               Confirm
@@ -243,7 +243,7 @@ const TimerCard = ({ timer }) => {
               setTimeLeft(timer.duration);
               stopAllAlarms();
             }}
-            className="bg-white/5 hover:bg-white/20 text-gray-300 px-4 py-2.5 sm:py-2 rounded-lg text-sm font-medium transition-all cursor-pointer "
+            className="bg-white/5 hover:bg-white/20 text-gray-300 px-4 py-2.5 sm:py-2 rounded-lg text-sm font-medium transition-all cursor-pointer"
             title="Reset">
             ↺
           </button>
